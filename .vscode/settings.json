@@ -4,5 +4,21 @@
   "deno.unstable": true,
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "conventionalCommits.scopes": [
+    "deps",
+    "utils",
+    "setting",
+    "hooks",
+    "app",
+    "actions",
+    "utils",
+    "deps",
+    "components",
+    "type",
+    "typo/spell",
+    "seo",
+    "images",
+    "scripts"
+  ]
 }
