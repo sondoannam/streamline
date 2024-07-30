@@ -17,7 +17,7 @@ import { Icons } from "@/components/icon";
 import { toast } from "@/components/ui/use-toast";
 
 const SignInPage = () => {
-  const { push } = useRouter();
+  const { push, refresh } = useRouter();
   const supabase = useSupabaseClient();
 
   const form = useForm<LoginFormType>({
@@ -45,6 +45,7 @@ const SignInPage = () => {
       });
 
       push(RootPath.Home);
+      refresh();
 
       return;
     }
@@ -54,7 +55,9 @@ const SignInPage = () => {
       title: "Đăng nhập thất bại",
       description: error.message,
     });
+    console.log(error);
   }
+
 
   return (
     <AuthCard
