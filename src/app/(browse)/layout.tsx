@@ -1,6 +1,8 @@
 import React from "react";
 
-import { NavBar } from "@/components/common/NavBar";
+import NavBar from "@/components/common/NavBar";
+import Sidebar from "@/components/common/SideBar";
+import { Container } from "@/components/common/Container";
 
 const BrowseLayout = ({
   children,
@@ -10,7 +12,10 @@ const BrowseLayout = ({
   return (
     <>
       <NavBar />
-      <div className="flex h-full pt-20">{children}</div>
+      <div className="flex h-full pt-20">
+        <Sidebar />
+        <Container>{children}</Container>
+      </div>
     </>
   );
 };
