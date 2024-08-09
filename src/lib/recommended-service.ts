@@ -4,19 +4,26 @@ import { getSelf } from "./auth-service";
 
 export const getRecommended = async () => {
   const supabase = createClient();
-  let userId;
+  let currentUser;
 
   try {
     const self = await getSelf();
-    userId = self.id;
+    currentUser = self;
   } catch (error) {
-    userId = null;
+    currentUser = null;
   }
 
   let fetchUsers;
 
-  if (userId) {
-    fetchUsers = supabase.from("users").select("*").neq("id", userId);
+  if (currentUser) {
+    const currentFollowing = `(${currentUser.following.map(id => `'${id}'`).join(", ")})`;
+
+    fetchUsers = supabase
+      .from("users")
+      .select("*")
+      .neq("id", currentUser.id)
+      .not("id", "in", currentFollowing)
+      .order("created_at", { ascending: false });
   } else {
     fetchUsers = supabase
       .from("users")

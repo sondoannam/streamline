@@ -3,10 +3,25 @@ import { createClient } from "@/utils/supabase/server";
 import { getSelf } from "./auth-service";
 import { removeEmailTrail } from "@/utils";
 
-export const isFollowingUser = async (id: string) => {
+export const getFollowedUsers = async () => {
+  const supabase = createClient();
   try {
-    const supabase = createClient();
+    const self = await getSelf();
 
+    const { data } = await supabase
+      .from("users")
+      .select("*")
+      .in("id", self.following);
+
+    return data ?? [];
+  } catch (error) {
+    return [];
+  }
+};
+
+export const isFollowingUser = async (id: string) => {
+  const supabase = createClient();
+  try {
     const self = await getSelf();
 
     const { data: otherUser } = await supabase
@@ -134,7 +149,7 @@ export const unfollowUser = async (id: string) => {
   const { error: deleteFollowErr } = await supabase
     .from("follow")
     .delete()
-    .eq("id", existingFollow.id)
+    .eq("id", existingFollow.id);
 
   if (deleteFollowErr) {
     console.log(deleteFollowErr);
