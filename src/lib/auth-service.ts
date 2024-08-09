@@ -10,7 +10,7 @@ export const getSelf = async () => {
     throw new Error("Unauthorized");
   }
 
-  const user = await supabase
+  const { data: user} = await supabase
     .from("users")
     .select("*")
     .eq("id", self.id)

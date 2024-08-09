@@ -2,6 +2,8 @@
 
 import { useSideBar } from "@/store/use-sidebar";
 import { Tables } from "@/types/supabase";
+import { getUserName } from "@/utils";
+
 import { UserItem, UserItemSkeleton } from "./UserItem";
 
 interface RecommendedProps {
@@ -25,7 +27,7 @@ export const Recommended = ({ data }: RecommendedProps) => {
           <UserItem
             key={user.id}
             email={user.email}
-            username={`${user.first_name} ${user.last_name}`}
+            username={getUserName(user)}
             imageUrl={user.avatarUrl ?? "/spooky.svg"}
             isLive={true}
           />

@@ -9,6 +9,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      follow: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follow_follower_id_fkey"
+            columns: ["follower_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follow_following_id_fkey"
+            columns: ["following_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           avatarUrl: string | null
@@ -16,6 +55,8 @@ export type Database = {
           created_at: string
           email: string
           first_name: string | null
+          followed_by: string[]
+          following: string[]
           id: string
           last_name: string | null
         }
@@ -25,6 +66,8 @@ export type Database = {
           created_at?: string
           email: string
           first_name?: string | null
+          followed_by?: string[]
+          following?: string[]
           id?: string
           last_name?: string | null
         }
@@ -34,6 +77,8 @@ export type Database = {
           created_at?: string
           email?: string
           first_name?: string | null
+          followed_by?: string[]
+          following?: string[]
           id?: string
           last_name?: string | null
         }

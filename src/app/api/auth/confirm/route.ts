@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
           {
             id: data.user?.id as string,
             email: data.user?.email as string,
-            avatarUrl: data.user?.app_metadata?.avatar_url ?? publicAvatarUrl,
+            avatarUrl: data.user?.app_metadata?.avatar_url ?? publicAvatarUrl.publicUrl,
           },
         ]);
 

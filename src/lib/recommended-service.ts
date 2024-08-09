@@ -1,12 +1,30 @@
 import { createClient } from "@/utils/supabase/server";
 import { Tables } from "@/types/supabase";
+import { getSelf } from "./auth-service";
 
 export const getRecommended = async () => {
   const supabase = createClient();
-  const users = await supabase
-    .from("users")
-    .select("*")
-    .order("created_at", { ascending: false });
+  let userId;
 
-  return users.data as unknown as Tables<"users">[];
+  try {
+    const self = await getSelf();
+    userId = self.id;
+  } catch (error) {
+    userId = null;
+  }
+
+  let fetchUsers;
+
+  if (userId) {
+    fetchUsers = supabase.from("users").select("*").neq("id", userId);
+  } else {
+    fetchUsers = supabase
+      .from("users")
+      .select("*")
+      .order("created_at", { ascending: false });
+  }
+
+  const { data } = await fetchUsers;
+
+  return data ?? [];
 };
