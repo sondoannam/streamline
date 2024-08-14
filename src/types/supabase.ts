@@ -9,6 +9,42 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      block: {
+        Row: {
+          blocked_at: string | null
+          blocked_id: string
+          blocker_id: string
+          id: string
+        }
+        Insert: {
+          blocked_at?: string | null
+          blocked_id: string
+          blocker_id: string
+          id?: string
+        }
+        Update: {
+          blocked_at?: string | null
+          blocked_id?: string
+          blocker_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "block_blocked_id_fkey"
+            columns: ["blocked_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "block_blocker_id_fkey"
+            columns: ["blocker_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       follow: {
         Row: {
           created_at: string
@@ -52,6 +88,7 @@ export type Database = {
         Row: {
           avatarUrl: string | null
           bio: string | null
+          blocking: string[]
           created_at: string
           email: string
           first_name: string | null
@@ -63,6 +100,7 @@ export type Database = {
         Insert: {
           avatarUrl?: string | null
           bio?: string | null
+          blocking?: string[]
           created_at?: string
           email: string
           first_name?: string | null
@@ -74,6 +112,7 @@ export type Database = {
         Update: {
           avatarUrl?: string | null
           bio?: string | null
+          blocking?: string[]
           created_at?: string
           email?: string
           first_name?: string | null

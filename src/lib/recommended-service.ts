@@ -1,5 +1,4 @@
 import { createClient } from "@/utils/supabase/server";
-import { Tables } from "@/types/supabase";
 import { getSelf } from "./auth-service";
 
 export const getRecommended = async () => {
@@ -16,7 +15,9 @@ export const getRecommended = async () => {
   let fetchUsers;
 
   if (currentUser) {
-    const currentFollowing = `(${currentUser.following.map(id => `'${id}'`).join(", ")})`;
+    const currentFollowing = `(${currentUser.following
+      .map((id) => `'${id}'`)
+      .join(", ")})`;
 
     fetchUsers = supabase
       .from("users")

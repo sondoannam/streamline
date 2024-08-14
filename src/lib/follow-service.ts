@@ -86,7 +86,7 @@ export const followUser = async (id: string) => {
       follower_id: self.id,
       following_id: otherUser.id,
     })
-    .select("*, users!follow_following_id_fkey(email)")
+    .select("*, users!follow_following_id_fkey(*)")
     .single();
 
   if (followErr) {
@@ -114,7 +114,7 @@ export const followUser = async (id: string) => {
     throw new Error("Failed to update followers");
   }
 
-  return data;
+  return data.users;
 };
 
 export const unfollowUser = async (id: string) => {
@@ -146,13 +146,15 @@ export const unfollowUser = async (id: string) => {
     throw new Error("Not following user");
   }
 
-  const { error: deleteFollowErr } = await supabase
+  const { data, error: deleteFollowErr } = await supabase
     .from("follow")
     .delete()
-    .eq("id", existingFollow.id);
+    .eq("id", existingFollow.id)
+    .select("*, users!follow_following_id_fkey(*)")
+    .single();
 
   if (deleteFollowErr) {
-    console.log(deleteFollowErr);
+    console.log(deleteFollowErr, data);
     throw new Error("Failed to delete follow record");
   }
 
@@ -178,5 +180,5 @@ export const unfollowUser = async (id: string) => {
     throw new Error("Failed to update followers");
   }
 
-  return removeEmailTrail(otherUser.email);
+  return data.users;
 };

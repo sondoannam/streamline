@@ -1,8 +1,10 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import { RootPath } from "@/constants/enum";
 import { followUser, unfollowUser } from "@/lib/follow-service";
-import { revalidatePath } from "next/cache";
+import { removeEmailTrail } from "@/utils";
 
 export const onFollow = async (id: string) => {
   try {
@@ -10,8 +12,10 @@ export const onFollow = async (id: string) => {
 
     revalidatePath(RootPath.Home);
 
-    if (followedUser?.users) {
-      revalidatePath(`${RootPath.Profile}/${followedUser.users.email}`);
+    if (followedUser) {
+      revalidatePath(
+        `${RootPath.Profile}/${removeEmailTrail(followedUser.email)}`
+      );
     }
 
     return followedUser;
@@ -23,15 +27,17 @@ export const onFollow = async (id: string) => {
 
 export const onUnfollow = async (id: string) => {
   try {
-    const unfollowedUserEmail = await unfollowUser(id);
+    const unfollowedUser = await unfollowUser(id);
 
     revalidatePath(RootPath.Home);
 
-    if (unfollowedUserEmail) {
-      revalidatePath(`${RootPath.Profile}/${unfollowedUserEmail}`);
+    if (unfollowedUser) {
+      revalidatePath(
+        `${RootPath.Profile}/${removeEmailTrail(unfollowedUser.email)}`
+      );
     }
 
-    return unfollowedUserEmail;
+    return unfollowedUser;
   } catch (error: any) {
     console.log(error);
     throw new Error("Internal server error", error);
