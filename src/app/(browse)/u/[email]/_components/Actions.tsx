@@ -80,7 +80,9 @@ const Actions = ({
       <Button variant="primary" disabled={isPending} onClick={onClickFollowing}>
         {isFollowing ? "Đang theo dõi" : "Theo dõi"}
       </Button>
-      <Button disabled={isPending} onClick={onClickBlock}>
+      <Button disabled={isPending
+        
+      } onClick={onClickBlock}>
         {isBlocked ? "Bỏ chặn" : "Chặn"}
       </Button>
     </>
