@@ -33,8 +33,36 @@ export type Database = {
             foreignKeyName: "block_blocked_id_fkey"
             columns: ["blocked_id"]
             isOneToOne: false
+            referencedRelation: "user_blocking_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "block_blocked_id_fkey"
+            columns: ["blocked_id"]
+            isOneToOne: false
+            referencedRelation: "user_following_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "block_blocked_id_fkey"
+            columns: ["blocked_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "block_blocker_id_fkey"
+            columns: ["blocker_id"]
+            isOneToOne: false
+            referencedRelation: "user_blocking_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "block_blocker_id_fkey"
+            columns: ["blocker_id"]
+            isOneToOne: false
+            referencedRelation: "user_following_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "block_blocker_id_fkey"
@@ -72,8 +100,36 @@ export type Database = {
             foreignKeyName: "follow_follower_id_fkey"
             columns: ["follower_id"]
             isOneToOne: false
+            referencedRelation: "user_blocking_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "follow_follower_id_fkey"
+            columns: ["follower_id"]
+            isOneToOne: false
+            referencedRelation: "user_following_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "follow_follower_id_fkey"
+            columns: ["follower_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follow_following_id_fkey"
+            columns: ["following_id"]
+            isOneToOne: false
+            referencedRelation: "user_blocking_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "follow_following_id_fkey"
+            columns: ["following_id"]
+            isOneToOne: false
+            referencedRelation: "user_following_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "follow_following_id_fkey"
@@ -125,7 +181,21 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      user_blocking_view: {
+        Row: {
+          blocking: string[] | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
+      user_following_view: {
+        Row: {
+          followed_by: string[] | null
+          following: string[] | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never

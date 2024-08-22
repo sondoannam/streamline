@@ -1,17 +1,33 @@
 import { createClient } from "@/utils/supabase/server";
 
 import { getSelf } from "./auth-service";
-import { removeEmailTrail } from "@/utils";
 
 export const getFollowedUsers = async () => {
   const supabase = createClient();
   try {
     const self = await getSelf();
 
+    const { data: user_following_view } = await supabase
+      .from("user_following_view")
+      .select("*")
+      .eq("user_id", self.id)
+      .single();
+
+    if (!user_following_view?.following) {
+      return [];
+    }
+
+    const { data: user_blocking_view } = await supabase
+      .from("user_blocking_view")
+      .select("*")
+      .eq("user_id", self.id)
+      .single();
+
     const { data } = await supabase
       .from("users")
       .select("*")
-      .in("id", self.following);
+      .in("id", user_following_view.following)
+      .not("id", "in", user_blocking_view?.blocking ?? []);
 
     return data ?? [];
   } catch (error) {
@@ -94,7 +110,8 @@ export const followUser = async (id: string) => {
     throw new Error("Failed to follow user");
   }
 
-  const { error: updateFollowingErr } = await supabase
+  // create trigger to update following and followers in supabase instead of doing this manually
+  /* const { error: updateFollowingErr } = await supabase
     .from("users")
     .update({ following: [...self.following, otherUser.id] })
     .eq("id", self.id);
@@ -112,7 +129,7 @@ export const followUser = async (id: string) => {
   if (updateFollowersErr) {
     console.log(updateFollowersErr);
     throw new Error("Failed to update followers");
-  }
+  } */
 
   return data.users;
 };
@@ -158,7 +175,8 @@ export const unfollowUser = async (id: string) => {
     throw new Error("Failed to delete follow record");
   }
 
-  const { error: updateFollowingErr } = await supabase
+  // create trigger to update following and followers in supabase instead of doing this manually
+  /* const { error: updateFollowingErr } = await supabase
     .from("users")
     .update({ following: self.following.filter((id) => id !== otherUser.id) })
     .eq("id", self.id);
@@ -178,7 +196,7 @@ export const unfollowUser = async (id: string) => {
   if (updateFollowersErr) {
     console.log(updateFollowersErr);
     throw new Error("Failed to update followers");
-  }
+  } */
 
   return data.users;
 };

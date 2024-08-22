@@ -71,8 +71,9 @@ export const blockUser = async (id: string) => {
   if (error) {
     throw new Error("Failed to block user");
   }
-
-  const { error: updateBlockedListErr } = await supabase
+  
+  // should create supabase trigger to update view instead of doing this manually
+  /* const { error: updateBlockedListErr } = await supabase
     .from("users")
     .update({
       blocking: [...self.blocking, otherUser.id],
@@ -81,7 +82,7 @@ export const blockUser = async (id: string) => {
 
   if (updateBlockedListErr) {
     throw new Error("Failed to update block list");
-  }
+  } */
 
   return data.users;
 };

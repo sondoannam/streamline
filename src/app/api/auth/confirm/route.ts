@@ -13,12 +13,14 @@ export async function GET(request: NextRequest) {
   if (token_hash && type) {
     const supabase = createClient();
 
-    const { error, data } = await supabase.auth.verifyOtp({
+    const { error } = await supabase.auth.verifyOtp({
       type,
       token_hash,
     });
+
     if (!error) {
-      const { data: publicAvatarUrl } = supabase.storage
+      // create user profile in the database by trigger function instead of here
+      /* const { data: publicAvatarUrl } = supabase.storage
         .from("public_contents")
         .getPublicUrl("/spooky.svg");
 
@@ -34,7 +36,7 @@ export async function GET(request: NextRequest) {
 
       if (createUserProfileError) {
         redirect("/error");
-      }
+      } */
 
       // redirect user to specified redirect URL or root of app
       redirect(next);
