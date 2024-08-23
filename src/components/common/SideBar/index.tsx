@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Wrapper } from "@/components/ui/wrapper";
+import { Wrapper } from '@/components/common/Wrapper';
 
 import { getRecommended } from "@/lib/recommended-service";
 import { getFollowedUsers } from "@/lib/follow-service";

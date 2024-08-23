@@ -1,12 +1,12 @@
 import { create } from "zustand";
 
-interface SideBarStore {
+interface CreatorSideBarStore {
   collapsed: boolean;
   onExpand: () => void;
   onCollapse: () => void;
 }
 
-export const useSideBar = create<SideBarStore>((set) => ({
+export const useCreatorSideBar = create<CreatorSideBarStore>((set) => ({
   collapsed: false,
   onExpand: () => set(() => ({ collapsed: false })),
   onCollapse: () => set(() => ({ collapsed: true })),

@@ -11,7 +11,7 @@ import { Hint } from "@/components/ui/hint";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Toggle = () => {
-  const { collapsed, onExpand, onCollapse } = useSideBar();
+  const { collapsed, onExpand, onCollapse } = useSideBar((state) => state);
 
   const label = collapsed ? "Expand" : "Collapse";
 

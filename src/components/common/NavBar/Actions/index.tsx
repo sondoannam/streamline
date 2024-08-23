@@ -1,10 +1,13 @@
 import React, { Suspense } from "react";
+
 import Link from "next/link";
-import { createClient } from "@/utils/supabase/server";
+import { Clapperboard } from "lucide-react";
 
 import { RootPath } from "@/constants/enum";
 import { Button } from "@/components/ui/button";
-import { Clapperboard } from "lucide-react";
+import { createClient } from "@/utils/supabase/server";
+import { removeEmailTrail } from "@/utils";
+
 import { UserButton } from "./UserButton";
 
 export async function Actions() {
@@ -28,13 +31,13 @@ export async function Actions() {
               className="text-muted-foreground hover:text-primary"
               asChild
             >
-              <Link href={`/u/${user.email}`}>
+              <Link href={`${RootPath.Profile}/${removeEmailTrail(user.email!)}`}>
                 <Clapperboard className="h-5 w-5 lg:mr-2" />
                 <span className="hidden lg:block">Dashboard</span>
               </Link>
             </Button>
 
-            <UserButton user={user} />
+            <UserButton />
           </div>
         )}
       </div>

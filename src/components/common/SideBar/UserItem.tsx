@@ -31,7 +31,7 @@ export const UserItem = ({
 
   const { collapsed } = useSideBar((state) => state);
 
-  const href = `${RootPath.Profile}/${removeEmailTrail(email)}`;
+  const href = `/${removeEmailTrail(email)}`;
   const isActive = pathname === href;
 
   return (

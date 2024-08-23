@@ -23,11 +23,18 @@ export const getFollowedUsers = async () => {
       .eq("user_id", self.id)
       .single();
 
+    const blockingIds =
+      user_blocking_view &&
+      user_blocking_view.blocking &&
+      user_blocking_view.blocking[0] !== null
+        ? user_blocking_view.blocking
+        : [];
+
     const { data } = await supabase
       .from("users")
       .select("*")
       .in("id", user_following_view.following)
-      .not("id", "in", user_blocking_view?.blocking ?? []);
+      .not("id", "in", `(${blockingIds.map((id) => id).join(",")})`);
 
     return data ?? [];
   } catch (error) {

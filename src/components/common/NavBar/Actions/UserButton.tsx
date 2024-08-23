@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { User as UserIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,20 +13,12 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
-import { User as UserIcon } from "lucide-react";
 import { RootPath } from "@/constants/enum";
+import { getSelf } from "@/lib/auth-service";
 import { LogoutButton } from "./LogoutButton";
-import { User } from "@supabase/supabase-js";
-import { createClient } from "@/utils/supabase/server";
 
-export async function UserButton({ user }: Readonly<{ user: User }>) {
-  const supabase = createClient();
-
-  const { data: userProfile } = await supabase
-    .from("users")
-    .select("*")
-    .eq("id", user.id)
-    .single();
+export async function UserButton() {
+  const userProfile = await getSelf();
 
   return (
     <DropdownMenu>
