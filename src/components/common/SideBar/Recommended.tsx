@@ -28,7 +28,7 @@ export const Recommended = ({ data }: RecommendedProps) => {
             key={user.id}
             email={user.email}
             username={getUserName(user)}
-            imageUrl={user.avatarUrl ?? "/spooky.svg"}
+            imageUrl={user.avatar_url ?? "/spooky.svg"}
             isLive={true}
           />
         ))}

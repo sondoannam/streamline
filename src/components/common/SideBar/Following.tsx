@@ -30,7 +30,7 @@ export const Following = ({ data }: FollowingProps) => {
           <UserItem
             key={user.id}
             email={user.email}
-            imageUrl={user.avatarUrl ?? "/spooky.svg"}
+            imageUrl={user.avatar_url ?? "/spooky.svg"}
             username={getUserName(user)}
             isLive={true}
           />

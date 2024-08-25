@@ -140,9 +140,79 @@ export type Database = {
           },
         ]
       }
+      stream: {
+        Row: {
+          created_at: string
+          id: string
+          ingress_id: string | null
+          is_chat_delayed: boolean
+          is_chat_enabled: boolean
+          is_chat_followers_only: boolean
+          is_live: boolean
+          name: string
+          server_url: string | null
+          stream_key: string | null
+          thumbnail_url: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ingress_id?: string | null
+          is_chat_delayed?: boolean
+          is_chat_enabled?: boolean
+          is_chat_followers_only?: boolean
+          is_live?: boolean
+          name: string
+          server_url?: string | null
+          stream_key?: string | null
+          thumbnail_url?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ingress_id?: string | null
+          is_chat_delayed?: boolean
+          is_chat_enabled?: boolean
+          is_chat_followers_only?: boolean
+          is_live?: boolean
+          name?: string
+          server_url?: string | null
+          stream_key?: string | null
+          thumbnail_url?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stream_userId_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_blocking_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "stream_userId_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_following_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "stream_userId_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
-          avatarUrl: string | null
+          avatar_url: string | null
           bio: string | null
           blocking: string[]
           created_at: string
@@ -154,7 +224,7 @@ export type Database = {
           last_name: string | null
         }
         Insert: {
-          avatarUrl?: string | null
+          avatar_url?: string | null
           bio?: string | null
           blocking?: string[]
           created_at?: string
@@ -166,7 +236,7 @@ export type Database = {
           last_name?: string | null
         }
         Update: {
-          avatarUrl?: string | null
+          avatar_url?: string | null
           bio?: string | null
           blocking?: string[]
           created_at?: string

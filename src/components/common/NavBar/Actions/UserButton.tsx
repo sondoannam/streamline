@@ -28,7 +28,7 @@ export async function UserButton() {
           className="rounded-full hover:!bg-gray-300 bg-gray-200 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center p-0 overflow-hidden"
         >
           <Image
-            src={userProfile?.avatarUrl ?? "/spooky.svg"}
+            src={userProfile?.avatar_url ?? "/spooky.svg"}
             alt="avatar"
             width={40}
             height={40}
