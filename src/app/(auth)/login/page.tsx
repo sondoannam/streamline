@@ -31,7 +31,6 @@ const SignInPage = () => {
   const {
     formState: { isSubmitting },
     handleSubmit,
-    setError,
     watch,
   } = form;
 
@@ -39,13 +38,13 @@ const SignInPage = () => {
     const { error } = await supabase.auth.signInWithPassword(values);
 
     if (!error) {
+      push(RootPath.Home);
+      refresh();
+
       toast({
         variant: "success",
         title: "Đăng nhập thành công",
       });
-
-      push(RootPath.Home);
-      refresh();
 
       return;
     }
@@ -57,7 +56,6 @@ const SignInPage = () => {
     });
     console.log(error);
   }
-
 
   return (
     <AuthCard

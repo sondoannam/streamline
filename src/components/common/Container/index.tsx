@@ -20,7 +20,6 @@ export const Container = ({ children }: ContainerProps) => {
     } else {
       onCollapse();
     }
-    console.log(matches);
   }, [matches, onCollapse, onExpand]);
 
   return (

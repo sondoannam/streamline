@@ -1,6 +1,6 @@
 "use server";
 
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
@@ -23,7 +23,8 @@ export async function signInWithGoogle() {
     redirect("/error");
   }
 
-  revalidatePath(RootPath.Home);
+  revalidatePath(RootPath.Home, 'layout');
+  
   redirect(data.url);
 }
 

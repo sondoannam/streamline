@@ -7,34 +7,11 @@ export const getFollowedUsers = async () => {
   try {
     const self = await getSelf();
 
-    const { data: user_following_view } = await supabase
-      .from("user_following_view")
-      .select("*")
-      .eq("user_id", self.id)
-      .single();
-
-    if (!user_following_view?.following) {
-      return [];
-    }
-
-    const { data: user_blocking_view } = await supabase
-      .from("user_blocking_view")
-      .select("*")
-      .eq("user_id", self.id)
-      .single();
-
-    const blockingIds =
-      user_blocking_view &&
-      user_blocking_view.blocking &&
-      user_blocking_view.blocking[0] !== null
-        ? user_blocking_view.blocking
-        : [];
-
     const { data } = await supabase
       .from("users")
       .select("*")
-      .in("id", user_following_view.following)
-      .not("id", "in", `(${blockingIds.map((id) => id).join(",")})`);
+      .in("id", self.following)
+      .not("id", "in", `(${self.blocking.map((id) => id).join(",")})`);
 
     return data ?? [];
   } catch (error) {

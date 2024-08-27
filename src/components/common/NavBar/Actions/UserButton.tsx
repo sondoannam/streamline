@@ -14,12 +14,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { RootPath } from "@/constants/enum";
-import { getSelf } from "@/lib/auth-service";
+
 import { LogoutButton } from "./LogoutButton";
+import { Tables } from "@/types/supabase";
 
-export async function UserButton() {
-  const userProfile = await getSelf();
+interface UserButtonProps {
+    user: Tables<"users">;
+}
 
+export function UserButton({ user }: UserButtonProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -28,7 +31,7 @@ export async function UserButton() {
           className="rounded-full hover:!bg-gray-300 bg-gray-200 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center p-0 overflow-hidden"
         >
           <Image
-            src={userProfile?.avatar_url ?? "/spooky.svg"}
+            src={user?.avatar_url ?? "/spooky.svg"}
             alt="avatar"
             width={40}
             height={40}
@@ -38,7 +41,7 @@ export async function UserButton() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-56">
         <DropdownMenuLabel className="text-base text-primary">
-          {userProfile?.first_name ?? userProfile?.email}
+          {user?.first_name ?? user?.email}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
