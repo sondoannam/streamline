@@ -19,10 +19,14 @@ import { LogoutButton } from "./LogoutButton";
 import { Tables } from "@/types/supabase";
 
 interface UserButtonProps {
-    user: Tables<"users">;
+  user: Tables<"users">;
 }
 
 export function UserButton({ user }: UserButtonProps) {
+  const displayName = user.first_name
+    ? `${user.first_name} ${user.last_name}`
+    : user.email;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -41,7 +45,7 @@ export function UserButton({ user }: UserButtonProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-56">
         <DropdownMenuLabel className="text-base text-primary">
-          {user?.first_name ?? user?.email}
+          {displayName}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

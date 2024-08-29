@@ -32,7 +32,7 @@ export const Navigation = () => {
           icon: MessageSquare,
         },
         {
-          label: "Community",
+          label: "Cộng đồng",
           href: `${RootPath.Profile}/${removeEmailTrail(user.email)}/community`,
           icon: Users,
         },
