@@ -1,0 +1,18 @@
+# Ignore artifacts:
+build
+coverage
+
+node_modules
+
+# Ignore all HTML files:
+*.html
+
+.github
+
+.next
+
+.swc
+.dockerignore
+
+# Ignore all files in the src/components/ui directory
+src/components/ui/*
