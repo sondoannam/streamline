@@ -1,6 +1,8 @@
 'use client';
 
-import React from 'react';
+import { ElementRef, useRef, useState, useTransition } from 'react';
+
+import { IngressInput } from 'livekit-server-sdk';
 
 import {
   Dialog,
@@ -20,8 +22,39 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { createIngress } from '@/actions/ingress';
+import { toast } from '@/components/ui/use-toast';
+
+const RTMP = String(IngressInput.RTMP_INPUT);
+const WHIP = String(IngressInput.WHIP_INPUT);
+
+type IngressType = typeof RTMP | typeof WHIP;
 
 const ConnectModal = () => {
+  const closeRef = useRef<ElementRef<'button'>>(null);
+  const [ingressType, setIngressType] = useState<IngressType>(RTMP);
+  const [isPending, startTransition] = useTransition();
+
+  const onSubmit = () => {
+    startTransition(() => {
+      createIngress(parseInt(ingressType))
+        .then(() => {
+          toast({
+            variant: 'success',
+            title: 'Thiết lập kết nối thành công',
+          });
+
+          closeRef.current?.click();
+        })
+        .catch(() =>
+          toast({
+            variant: 'destructive',
+            title: 'Có lỗi xảy ra',
+          }),
+        );
+    });
+  };
+
   return (
     <Dialog>
       <DialogTrigger>
@@ -33,13 +66,17 @@ const ConnectModal = () => {
           <DialogTitle>Thiết lập kết nối</DialogTitle>
         </DialogHeader>
 
-        <Select>
+        <Select
+          value={ingressType}
+          onValueChange={(value) => setIngressType(value)}
+          disabled={isPending}
+        >
           <SelectTrigger className='w-full'>
             <SelectValue placeholder='Đầu vào' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value='RTMP'>RTMP</SelectItem>
-            <SelectItem value='WHIP'>WHIP</SelectItem>
+            <SelectItem value={RTMP}>RTMP</SelectItem>
+            <SelectItem value={WHIP}>WHIP</SelectItem>
           </SelectContent>
         </Select>
 
@@ -52,10 +89,12 @@ const ConnectModal = () => {
         </Alert>
 
         <div className='flex justify-between'>
-          <DialogClose>
+          <DialogClose ref={closeRef} asChild>
             <Button variant='ghost'>Cancel</Button>
           </DialogClose>
-          <Button variant='primary'>Kết nối</Button>
+          <Button variant='primary' onClick={onSubmit} disabled={isPending}>
+            Kết nối
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
