@@ -2,13 +2,14 @@
 
 import React from "react";
 
-import { Tables } from "@/types/supabase";
 import { useSideBar } from "@/store/use-sidebar";
-import { UserItem } from "./UserItem";
 import { getUserName } from "@/utils";
+import { UserWithStream } from "@/types/dto";
+
+import { UserItem } from "./UserItem";
 
 interface FollowingProps {
-  data: Tables<"users">[];
+  data: UserWithStream[];
 }
 
 export const Following = ({ data }: FollowingProps) => {
@@ -32,7 +33,7 @@ export const Following = ({ data }: FollowingProps) => {
             email={user.email}
             imageUrl={user.avatar_url ?? "/spooky.svg"}
             username={getUserName(user)}
-            isLive={true}
+            isLive={user.stream?.is_live ?? false}
           />
         ))}
       </ul>

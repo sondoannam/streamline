@@ -20,7 +20,7 @@ export const SidebarSkeleton = () => {
 };
 
 export const Sidebar = async () => {
-  const recommened = await getRecommended();
+  const recommeneds = await getRecommended();
   const followings = await getFollowedUsers();
 
   return (
@@ -28,7 +28,7 @@ export const Sidebar = async () => {
       <Toggle />
       <div className="space-y-4 pt-4 lg:pt-0">
         <Following data={followings} />
-        <Recommended data={recommened} />
+        <Recommended data={recommeneds} />
       </div>
     </Wrapper>
   );

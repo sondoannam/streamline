@@ -1,6 +1,6 @@
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from '@/utils/supabase/server';
 
-import { getSelf } from "./auth-service";
+import { getSelf } from './auth-service';
 
 export const getFollowedUsers = async () => {
   const supabase = createClient();
@@ -8,10 +8,15 @@ export const getFollowedUsers = async () => {
     const self = await getSelf();
 
     const { data } = await supabase
-      .from("users")
-      .select("*")
-      .in("id", self.following)
-      .not("id", "in", `(${self.blocking.map((id) => id).join(",")})`);
+      .from('users')
+      .select('*, stream(*)')
+      .in('id', self.following)
+      .not('id', 'in', `(${self.blocking.map((id) => id).join(',')})`);
+
+    // const { data: following } = await supabase
+    //   .from('follow')
+    //   .select('*, users!follow_following_id_fkey(*)')
+    //   .eq('follower_id', self.id);
 
     return data ?? [];
   } catch (error) {
@@ -24,14 +29,10 @@ export const isFollowingUser = async (id: string) => {
   try {
     const self = await getSelf();
 
-    const { data: otherUser } = await supabase
-      .from("users")
-      .select("*")
-      .eq("id", id)
-      .single();
+    const { data: otherUser } = await supabase.from('users').select('*').eq('id', id).single();
 
     if (!otherUser) {
-      throw new Error("User not found");
+      throw new Error('User not found');
     }
 
     if (otherUser.id === self.id) {
@@ -39,10 +40,10 @@ export const isFollowingUser = async (id: string) => {
     }
 
     const { data: existingFollow } = await supabase
-      .from("follow")
-      .select("*")
-      .eq("follower_id", self.id)
-      .eq("following_id", otherUser.id)
+      .from('follow')
+      .select('*')
+      .eq('follower_id', self.id)
+      .eq('following_id', otherUser.id)
       .single();
 
     return !!existingFollow;
@@ -55,43 +56,39 @@ export const followUser = async (id: string) => {
   const supabase = createClient();
   const self = await getSelf();
 
-  const { data: otherUser } = await supabase
-    .from("users")
-    .select("*")
-    .eq("id", id)
-    .single();
+  const { data: otherUser } = await supabase.from('users').select('*').eq('id', id).single();
 
   if (!otherUser) {
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
 
   if (otherUser.id === self.id) {
-    throw new Error("Cannot follow yourtself");
+    throw new Error('Cannot follow yourtself');
   }
 
   const { data: existingFollow } = await supabase
-    .from("follow")
-    .select("*")
-    .eq("follower_id", self.id)
-    .eq("following_id", otherUser.id)
+    .from('follow')
+    .select('*')
+    .eq('follower_id', self.id)
+    .eq('following_id', otherUser.id)
     .single();
 
   if (existingFollow) {
-    throw new Error("Already following user");
+    throw new Error('Already following user');
   }
 
   const { data, error: followErr } = await supabase
-    .from("follow")
+    .from('follow')
     .insert({
       follower_id: self.id,
       following_id: otherUser.id,
     })
-    .select("*, users!follow_following_id_fkey(*)")
+    .select('*, users!follow_following_id_fkey(*)')
     .single();
 
   if (followErr) {
     console.log(followErr, data);
-    throw new Error("Failed to follow user");
+    throw new Error('Failed to follow user');
   }
 
   // create trigger to update following and followers in supabase instead of doing this manually
@@ -122,41 +119,37 @@ export const unfollowUser = async (id: string) => {
   const supabase = createClient();
   const self = await getSelf();
 
-  const { data: otherUser } = await supabase
-    .from("users")
-    .select("*")
-    .eq("id", id)
-    .single();
+  const { data: otherUser } = await supabase.from('users').select('*').eq('id', id).single();
 
   if (!otherUser) {
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
 
   if (otherUser.id === self.id) {
-    throw new Error("Cannot unfollow yourtself");
+    throw new Error('Cannot unfollow yourtself');
   }
 
   const { data: existingFollow } = await supabase
-    .from("follow")
-    .select("*")
-    .eq("follower_id", self.id)
-    .eq("following_id", otherUser.id)
+    .from('follow')
+    .select('*')
+    .eq('follower_id', self.id)
+    .eq('following_id', otherUser.id)
     .single();
 
   if (!existingFollow) {
-    throw new Error("Not following user");
+    throw new Error('Not following user');
   }
 
   const { data, error: deleteFollowErr } = await supabase
-    .from("follow")
+    .from('follow')
     .delete()
-    .eq("id", existingFollow.id)
-    .select("*, users!follow_following_id_fkey(*)")
+    .eq('id', existingFollow.id)
+    .select('*, users!follow_following_id_fkey(*)')
     .single();
 
   if (deleteFollowErr) {
     console.log(deleteFollowErr, data);
-    throw new Error("Failed to delete follow record");
+    throw new Error('Failed to delete follow record');
   }
 
   // create trigger to update following and followers in supabase instead of doing this manually

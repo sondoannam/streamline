@@ -10,26 +10,28 @@ import {
   IngressInput,
   IngressClient,
   RoomServiceClient,
-  TrackSource,
+//   TrackSource,
   type CreateIngressOptions,
-  IngressVideoOptions,
-  IngressAudioOptions,
+//   IngressVideoOptions,
+//   IngressAudioOptions,
 } from 'livekit-server-sdk';
+import { TrackSource } from "livekit-server-sdk/dist/proto/livekit_models";
+
 import { revalidatePath } from 'next/cache';
 
 const roomService = new RoomServiceClient(
   process.env.LIVEKIT_API_URL!,
-  process.env.LIVEKIT_API_KEY,
-  process.env.LIVEKIT_API_SECRET,
+  process.env.LIVEKIT_API_KEY!,
+  process.env.LIVEKIT_API_SECRET!,
 );
 
 const ingressClient = new IngressClient(process.env.LIVEKIT_API_URL!);
 
-export const resetIngress = async (hostIdentity: string) => {
+export const resetIngresses = async (hostIdentity: string) => {
   const ingresses = await ingressClient.listIngress({
     roomName: hostIdentity,
   });
-
+  console.log(ingresses);
   const rooms = await roomService.listRooms([hostIdentity]);
 
   for (const room of rooms) {
@@ -38,6 +40,7 @@ export const resetIngress = async (hostIdentity: string) => {
 
   for (const ingress of ingresses) {
     if (ingress.ingressId) {
+      console.log('delete ingress', ingress.ingressId);
       await ingressClient.deleteIngress(ingress.ingressId);
     }
   }
@@ -47,40 +50,50 @@ export const createIngress = async (ingressType: IngressInput) => {
   const supabase = createClient();
   const self = await getSelf();
 
-  await resetIngress(self.id);
+  const username = removeEmailTrail(self.email);
+
+  await resetIngresses(self.id);
 
   const options: CreateIngressOptions = {
-    name: `${self.first_name} ${self.last_name}`,
+    name: username,
     roomName: self.id,
-    participantName: `${self.first_name} ${self.last_name}`,
+    participantName: username,
     participantIdentity: self.id,
   };
 
   if (ingressType === IngressInput.WHIP_INPUT) {
-    options.enableTranscoding = true;
-  } else {
-    // old version
-    // options.video = {
-    //     source: TrackSource.CAMERA,
-    //     preset: IngressVideoEncodingPreset.H264_1080P_30FPS_3_LAYERS, old version
-    // }
+    options.bypassTranscoding = true;
 
     // version 2.x
-    options.video = new IngressVideoOptions({
-      source: TrackSource.CAMERA,
-      encodingOptions: {
-        value: IngressVideoEncodingPreset.H264_1080P_30FPS_3_LAYERS,
-        case: 'preset',
-      },
-    });
+    // options.enableTranscoding = false;
+  } else {
+    // old version
+    options.video = {
+        source: TrackSource.CAMERA,
+        preset: IngressVideoEncodingPreset.H264_1080P_30FPS_3_LAYERS,
+    }
 
-    options.audio = new IngressAudioOptions({
-      source: TrackSource.MICROPHONE,
-      encodingOptions: {
-        value: IngressAudioEncodingPreset.OPUS_STEREO_96KBPS,
-        case: 'preset',
-      },
-    });
+    options.audio = {
+        source: TrackSource.MICROPHONE,
+        preset: IngressAudioEncodingPreset.OPUS_STEREO_96KBPS,
+    }
+
+    // version 2.x
+    // options.video = new IngressVideoOptions({
+    //   source: TrackSource.CAMERA,
+    //   encodingOptions: {
+    //     case: 'preset',
+    //     value: IngressVideoEncodingPreset.H264_1080P_30FPS_3_LAYERS,
+    //   },
+    // });
+
+    // options.audio = new IngressAudioOptions({
+    //   source: TrackSource.MICROPHONE,
+    //   encodingOptions: {
+    //     case: 'preset',
+    //     value: IngressAudioEncodingPreset.OPUS_STEREO_96KBPS,
+    //   },
+    // });
   }
 
   const ingress = await ingressClient.createIngress(ingressType, options);
@@ -102,7 +115,7 @@ export const createIngress = async (ingressType: IngressInput) => {
     throw new Error('Failed to update stream ingress');
   }
 
-  revalidatePath(`${RootPath.Profile}/${removeEmailTrail(self.email)}/keys`);
-
+  revalidatePath(`${RootPath.Profile}/${username}/keys`);
+  console.log('ingress: ', ingress);
   return JSON.parse(JSON.stringify(ingress));
 };

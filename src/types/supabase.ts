@@ -190,21 +190,21 @@ export type Database = {
           {
             foreignKeyName: "stream_userId_fkey"
             columns: ["user_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "user_blocking_view"
             referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "stream_userId_fkey"
             columns: ["user_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "user_following_view"
             referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "stream_userId_fkey"
             columns: ["user_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
