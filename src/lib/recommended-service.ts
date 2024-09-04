@@ -25,7 +25,7 @@ export const getRecommended = async () => {
 
     fetchUsers = supabase
       .from("users")
-      .select("*, stream(*)")
+      .select("*, stream(is_live)")
       .neq("id", currentUser.id)
       .not("id", "in", currentFollowing)
       .not("id", "in", currentBlocking)
@@ -33,7 +33,7 @@ export const getRecommended = async () => {
   } else {
     fetchUsers = supabase
       .from("users")
-      .select("*, stream(*)")
+      .select("*, stream(is_live)")
       .order("created_at", { ascending: false });
   }
 

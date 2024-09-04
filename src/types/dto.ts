@@ -5,4 +5,4 @@ export interface LoginDto {
   password: string;
 }
 
-export type UserWithStream = Tables<'users'> & { stream: Tables<'stream'> | null };
+export type UserWithStream = Tables<'users'> & { stream: { is_live: boolean } | null };

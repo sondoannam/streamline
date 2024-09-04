@@ -9,7 +9,7 @@ export const getFollowedUsers = async () => {
 
     const { data } = await supabase
       .from('users')
-      .select('*, stream(*)')
+      .select('*, stream(is_live)')
       .in('id', self.following)
       .not('id', 'in', `(${self.blocking.map((id) => id).join(',')})`);
 
