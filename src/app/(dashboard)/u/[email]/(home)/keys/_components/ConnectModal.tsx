@@ -57,7 +57,7 @@ const ConnectModal = () => {
 
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button variant='primary'>Kết nối</Button>
       </DialogTrigger>
 

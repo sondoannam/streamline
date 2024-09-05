@@ -17,27 +17,27 @@ export async function POST(request: Request) {
   const event = receiver.receive(body, authorization);
   console.log(event);
 
-  if (event.ingressInfo?.ingressId) {
-    if (event.event === 'ingress_ended') {
-      const { error } = await supabase
-        .from('stream')
-        .update({ is_live: false })
-        .eq('ingress_id', event.ingressInfo.ingressId);
+  if (event.event === 'ingress_ended') {
+    const { error } = await supabase
+      .from('stream')
+      .update({ is_live: false })
+      .eq('ingress_id', event.ingressInfo?.ingressId!);
 
-      if (error) {
-        return new Response('Error updating stream ended', { status: 400 });
-      }
+    if (error) {
+      console.log(error);
+      return new Response('Error updating stream ended', { status: 400 });
     }
+  }
 
-    if (event.event === 'ingress_started') {
-      const { error } = await supabase
-        .from('stream')
-        .update({ is_live: true })
-        .eq('ingress_id', event.ingressInfo.ingressId);
+  if (event.event === 'ingress_started') {
+    const { error } = await supabase
+      .from('stream')
+      .update({ is_live: true })
+      .eq('ingress_id', event.ingressInfo?.ingressId!);
 
-      if (error) {
-        return new Response('Error updating stream started', { status: 400 });
-      }
+    if (error) {
+      console.log(error);
+      return new Response('Error updating stream started', { status: 400 });
     }
   }
 

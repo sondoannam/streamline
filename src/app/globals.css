@@ -9,7 +9,7 @@ body,
   @apply bg-neutral-900/80;
 }
 
-.hidden-scroll-bar {
+.hidden-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
   &::-webkit-scrollbar {

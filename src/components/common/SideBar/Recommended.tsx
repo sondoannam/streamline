@@ -2,12 +2,12 @@
 
 import { useSideBar } from '@/store/use-sidebar';
 import { getUserName } from '@/utils';
-import { UserWithStream } from '@/types/dto';
+import { UserWithStreamStatus } from '@/types/dto';
 
 import { UserItem, UserItemSkeleton } from './UserItem';
 
 interface RecommendedProps {
-  data: UserWithStream[];
+  data: UserWithStreamStatus[];
 }
 
 export const Recommended = ({ data }: RecommendedProps) => {

@@ -4,12 +4,12 @@ import React from "react";
 
 import { useSideBar } from "@/store/use-sidebar";
 import { getUserName } from "@/utils";
-import { UserWithStream } from "@/types/dto";
+import { UserWithStreamStatus } from "@/types/dto";
 
 import { UserItem } from "./UserItem";
 
 interface FollowingProps {
-  data: UserWithStream[];
+  data: UserWithStreamStatus[];
 }
 
 export const Following = ({ data }: FollowingProps) => {

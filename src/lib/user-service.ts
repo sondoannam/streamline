@@ -4,7 +4,7 @@ export const getUserByEmail = async (email: string) => {
   const supabase = createClient();
   const { data: user } = await supabase
     .from("users")
-    .select("*")
+    .select("*, stream(*)")
     .like("email", `${email}%`)
     .single();
 
@@ -15,7 +15,7 @@ export const getUserById = async (id: string) => {
   const supabase = createClient();
   const { data: user } = await supabase
     .from("users")
-    .select("*")
+    .select("*, stream(*)")
     .eq("id", id)
     .single();
 
