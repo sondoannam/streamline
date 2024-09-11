@@ -1,6 +1,6 @@
-import { Tables } from "@/types/supabase";
+import { Tables } from '@/types/supabase';
 
-export const getUserName = (user: Tables<"users">) => {
+export const getUserName = (user: Tables<'users'>) => {
   if (user.first_name && user.last_name) {
     return `${user.first_name} ${user.last_name}`;
   }
@@ -8,5 +8,19 @@ export const getUserName = (user: Tables<"users">) => {
 };
 
 export const removeEmailTrail = (email: string) => {
-  return email.split("@")[0];
+  return email.split('@')[0];
+};
+
+export const stringToColor = (str: string) => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = '#';
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += ('00' + value.toString(16)).slice(-2);
+  }
+  return color;
 };

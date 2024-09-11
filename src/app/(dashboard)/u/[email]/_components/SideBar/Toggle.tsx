@@ -14,7 +14,7 @@ export const Toggle = () => {
     (state) => state
   );
 
-  const label = collapsed ? "Expand" : "Collapse";
+  const label = collapsed ? "Mở rộng" : "Thu gọn";
 
   if (!isClient) {
     return null;
