@@ -86,7 +86,7 @@ export const followUser = async (id: string) => {
     .select('*, users!follow_following_id_fkey(*)')
     .single();
 
-  if (followErr) {
+  if (followErr || !data?.users) {
     console.log(followErr, data);
     throw new Error('Failed to follow user');
   }
@@ -147,7 +147,7 @@ export const unfollowUser = async (id: string) => {
     .select('*, users!follow_following_id_fkey(*)')
     .single();
 
-  if (deleteFollowErr) {
+  if (deleteFollowErr || !data?.users) {
     console.log(deleteFollowErr, data);
     throw new Error('Failed to delete follow record');
   }
