@@ -8,10 +8,9 @@ import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { RootPath } from "@/constants/enum";
 import { removeEmailTrail } from "@/utils";
 
-import UserAvatar from "../UserAvatar";
+import { UserAvatar } from "../UserAvatar";
 import { LiveBadge } from "../LiveBadge";
 
 interface UserItemProps {

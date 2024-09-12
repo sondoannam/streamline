@@ -32,7 +32,7 @@ interface UserAvatarProps extends VariantProps<typeof avatarSizes> {
   showBadge?: boolean;
 }
 
-const UserAvatar = ({
+export const UserAvatar = ({
   imageUrl,
   username,
   isLive,
@@ -63,5 +63,3 @@ const UserAvatar = ({
     </div>
   );
 };
-
-export default UserAvatar;

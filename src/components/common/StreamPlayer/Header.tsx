@@ -4,7 +4,7 @@ import { UserIcon } from 'lucide-react';
 import { useParticipants, useRemoteParticipant } from '@livekit/components-react';
 
 import { Skeleton } from '@/components/ui/skeleton';
-import UserAvatar, { UserAvatarSkeleton } from '../UserAvatar';
+import { UserAvatar, UserAvatarSkeleton } from '../UserAvatar';
 import { VerifyMark } from '../VerifyMark';
 import { Actions, ActionsSkeleton } from './Actions';
 
