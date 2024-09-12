@@ -8,9 +8,10 @@ import { useChat, useConnectionState, useRemoteParticipant } from '@livekit/comp
 
 import { ChatVariant, useChatSideBar } from '@/store/use-chat-sidebar';
 
-import { ChatHeader } from './ChatHeader';
-import { ChatForm } from './ChatForm';
-import { ChatList } from './ChatList';
+import { ChatHeader, ChatHeaderSkeleton } from './ChatHeader';
+import { ChatForm, ChatFormSkeleton } from './ChatForm';
+import { ChatList, ChatListSkeleton } from './ChatList';
+import { ChatCommunity } from './ChatCommunity';
 
 interface ChatProps {
   viewerName: string;
@@ -82,10 +83,18 @@ export const Chat = ({
         </>
       )}
       {variant === ChatVariant.COMMUNITY && (
-        <>
-          <p>Cộng đồng</p>
-        </>
+        <ChatCommunity viewerName={viewerName} hostName={hostName} isHidden={isHidden} />
       )}
+    </div>
+  );
+};
+
+export const ChatSkeleton = () => {
+  return (
+    <div className='flex flex-col border-l border-b pt-0 h-[calc(100vh-80px)] border-2'>
+      <ChatHeaderSkeleton />
+      <ChatListSkeleton />
+      <ChatFormSkeleton />
     </div>
   );
 };
