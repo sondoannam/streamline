@@ -6,3 +6,8 @@ export interface LoginDto {
 }
 
 export type UserWithStreamStatus = Tables<'users'> & { stream: { is_live: boolean } | null };
+
+export type ImageFile = {
+    file?: File;
+    preview: string | null;
+}

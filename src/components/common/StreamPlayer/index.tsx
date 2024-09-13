@@ -13,6 +13,7 @@ import { Video, VideoSkeleton } from './Video';
 import { Header, HeaderSkeleton } from './Header';
 import { Chat, ChatSkeleton } from './Chat';
 import { ChatToggle } from './ChatToggle';
+import { InfoCard } from './InfoCard';
 
 interface StreamPlayerProps {
   user: Tables<'users'>;
@@ -52,6 +53,12 @@ export const StreamPlayer = ({ user, stream, isFollowing }: StreamPlayerProps) =
             imageUrl={user.avatar_url}
             isFollowing={isFollowing}
             name={stream.name}
+          />
+          <InfoCard 
+            hostIdentity={user.id}
+            viewerIdentity={identity}
+            name={stream.name}
+            thumbnailUrl={stream.thumbnail_url}
           />
         </div>
 
