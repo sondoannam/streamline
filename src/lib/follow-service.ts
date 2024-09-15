@@ -24,6 +24,20 @@ export const getFollowedUsers = async () => {
   }
 };
 
+export const getFollowersCount = async (id: string) => {
+  const supabase = createClient();
+  try {
+    const { count } = await supabase
+      .from('follow')
+      .select('follower_id', { count: 'exact', head: true })
+      .eq('following_id', id);
+
+    return count ?? 0;
+  } catch {
+    return 0;
+  }
+};
+
 export const isFollowingUser = async (id: string) => {
   const supabase = createClient();
   try {

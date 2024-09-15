@@ -14,14 +14,16 @@ import { Header, HeaderSkeleton } from './Header';
 import { Chat, ChatSkeleton } from './Chat';
 import { ChatToggle } from './ChatToggle';
 import { InfoCard } from './InfoCard';
+import { AboutCard } from './AboutCard';
 
 interface StreamPlayerProps {
   user: Tables<'users'>;
   stream: Tables<'stream'>;
   isFollowing: boolean;
+  followersCount: number;
 }
 
-export const StreamPlayer = ({ user, stream, isFollowing }: StreamPlayerProps) => {
+export const StreamPlayer = ({ user, stream, isFollowing, followersCount }: StreamPlayerProps) => {
   const { token, name, identity } = useViewerToken(user.id);
   const { collapsed } = useChatSideBar((state) => state);
 
@@ -59,6 +61,13 @@ export const StreamPlayer = ({ user, stream, isFollowing }: StreamPlayerProps) =
             viewerIdentity={identity}
             name={stream.name}
             thumbnailUrl={stream.thumbnail_url}
+          />
+          <AboutCard 
+            hostName={user.username ?? removeEmailTrail(user.email)}
+            hostIdentity={user.id}
+            viewerIdentity={identity}
+            bio={user.bio}
+            followedByCount={followersCount}
           />
         </div>
 
