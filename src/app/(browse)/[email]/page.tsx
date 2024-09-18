@@ -1,13 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import { notFound } from "next/navigation";
+import { notFound } from 'next/navigation';
 
-import { getUserByEmail } from "@/lib/user-service";
-import { isFollowingUser } from "@/lib/follow-service";
-import { getUserName } from "@/utils";
+import { getUserByEmail } from '@/lib/user-service';
+import { getFollowersCount, isFollowingUser } from '@/lib/follow-service';
+import { isBlockedByUser } from '@/lib/block-service';
 
-import Actions from "./_components/Actions";
-import { isBlockedByUser } from "@/lib/block-service";
+import { StreamPlayer } from '@/components/common/StreamPlayer';
 
 interface UserPageProps {
   params: {
@@ -18,20 +17,22 @@ interface UserPageProps {
 const UserPage = async ({ params }: UserPageProps) => {
   const user = await getUserByEmail(params.email);
 
-  if (!user) notFound();
+  if (!user?.stream) notFound();
 
-  const isFollowing = await isFollowingUser(user.id);
   const isBlocked = await isBlockedByUser(user.id);
 
+  if (isBlocked) notFound();
+
+  const isFollowing = await isFollowingUser(user.id);
+  const followersCount = await getFollowersCount(user.id);
+
   return (
-    <div className="flex flex-col gap-y-4">
-      <Actions
-        isFollowing={isFollowing}
-        isBlocked={isBlocked}
-        userId={user.id}
-        username={getUserName(user)}
-      />
-    </div>
+    <StreamPlayer
+      user={user}
+      stream={user.stream}
+      isFollowing={isFollowing}
+      followersCount={followersCount}
+    />
   );
 };
 

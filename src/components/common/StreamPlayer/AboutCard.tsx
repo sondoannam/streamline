@@ -21,8 +21,6 @@ export const AboutCard = ({
   const hostAsViewer = `host-${hostIdentity}`;
   const isHost = viewerIdentity === hostAsViewer;
 
-  if (!isHost) return null;
-
   return (
     <div className='px-4'>
       <div className='group rounded-xl bg-background p-6 lg:p-10 flex flex-col gap-y-3'>

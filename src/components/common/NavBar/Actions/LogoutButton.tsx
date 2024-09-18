@@ -23,6 +23,7 @@ export const LogoutButton = () => {
     }
 
     push(`${RootPath.Login}?next=${pathname}`);
+    refresh();
   };
   return (
     <Button

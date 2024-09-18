@@ -61,7 +61,10 @@ export const ChatForm = ({
           onChange={(e) => onChange(e.target.value)}
           placeholder='Nhập bình luận...'
           disabled={isDisabled}
-          className={cn('border-white/10', isFollowersOnly && 'roundedt-t-none border-t-0')}
+          className={cn(
+            'border-white/10',
+            isFollowersOnly || (isDelayed && 'rounded-t-none border-t-0'),
+          )}
         />
       </div>
       <div className='ml-auto'>
