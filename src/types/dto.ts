@@ -11,3 +11,11 @@ export type ImageFile = {
     file?: File;
     preview: string | null;
 }
+
+export type StreamDto = {
+    id: string;
+    thumbnail_url: string | null;
+    name: string;
+    is_live: boolean;
+    users: Tables<'users'> | null;
+}

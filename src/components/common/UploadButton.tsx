@@ -4,8 +4,8 @@ import { ElementRef, useRef } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Image as ImageIcon } from 'lucide-react';
-import { Input } from '../ui/input';
-import { toast } from '../ui/use-toast';
+import { Input } from '@/components/ui/input';
+import { toast } from '@/components/ui/use-toast';
 
 /**
  *
